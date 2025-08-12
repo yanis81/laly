@@ -173,6 +173,16 @@ export interface Content {
   author_id: string;
 }
 
+export interface SiteSetting {
+  id: string;
+  key: string;
+  value: Record<string, any>;
+  category: string;
+  created_at: string;
+  updated_at: string;
+  author_id?: string;
+}
+
 export interface User {
   id: string;
   email: string;

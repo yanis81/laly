@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase, Content } from '../../lib/supabase';
+import { supabase, Content, SiteSetting } from '../../lib/supabase';
 import { Plus, Edit, Trash2, Eye, EyeOff, Save, X, Home, Settings, Globe } from 'lucide-react';
 
 const AdminPanel = () => {
@@ -39,6 +39,7 @@ const AdminPanel = () => {
   useEffect(() => {
     checkUser();
     fetchContents();
+    loadSiteSettings();
   }, []);
 
   const checkUser = async () => {
@@ -59,6 +60,105 @@ const AdminPanel = () => {
       console.error('Error fetching contents:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadSiteSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('*');
+
+      if (error) throw error;
+
+      // Transformer les données en format utilisable
+      const settingsObj = data.reduce((acc: any, setting: any) => {
+        return { ...acc, ...setting.value };
+      }, {});
+
+      setSiteSettings({
+        siteName: settingsObj.siteName || 'POP travel',
+        siteTagline: settingsObj.siteTagline || '✈️ Voyage avec style',
+        heroTitle: settingsObj.heroTitle || 'POP travel',
+        heroSubtitle: settingsObj.heroSubtitle || 'Découvre le monde avec style ✨ Des récits authentiques, des guides pratiques et des inspirations pour tes prochaines aventures 🗺️',
+        aboutTitle: settingsObj.aboutTitle || 'À propos de POP travel 🤍',
+        aboutDescription: settingsObj.aboutDescription || 'Salut, moi c\'est POP ! ✌️ Passionnée de voyage depuis toujours, je partage mes aventures pour t\'inspirer à découvrir le monde autrement.',
+        contactEmail: settingsObj.contactEmail || 'pop@travel.com',
+        socialInstagram: settingsObj.socialInstagram || '#',
+        socialYoutube: settingsObj.socialYoutube || '#',
+        newsletterText: settingsObj.newsletterText || 'Reçois mes derniers articles, bons plans et inspirations directement dans ta boîte mail ! ✨'
+      });
+    } catch (error) {
+      console.error('Error loading site settings:', error);
+    }
+  };
+
+  const saveSiteSettings = async () => {
+    if (!user) return;
+
+    try {
+      // Préparer les données à sauvegarder par catégorie
+      const settingsToSave = [
+        {
+          key: 'site_identity',
+          value: {
+            siteName: siteSettings.siteName,
+            siteTagline: siteSettings.siteTagline
+          },
+          category: 'identity'
+        },
+        {
+          key: 'hero_section',
+          value: {
+            heroTitle: siteSettings.heroTitle,
+            heroSubtitle: siteSettings.heroSubtitle
+          },
+          category: 'content'
+        },
+        {
+          key: 'about_section',
+          value: {
+            aboutTitle: siteSettings.aboutTitle,
+            aboutDescription: siteSettings.aboutDescription
+          },
+          category: 'content'
+        },
+        {
+          key: 'contact_social',
+          value: {
+            contactEmail: siteSettings.contactEmail,
+            socialInstagram: siteSettings.socialInstagram,
+            socialYoutube: siteSettings.socialYoutube
+          },
+          category: 'contact'
+        },
+        {
+          key: 'newsletter',
+          value: {
+            newsletterText: siteSettings.newsletterText
+          },
+          category: 'content'
+        }
+      ];
+
+      // Sauvegarder chaque paramètre
+      for (const setting of settingsToSave) {
+        const { error } = await supabase
+          .from('site_settings')
+          .upsert({
+            ...setting,
+            author_id: user.id
+          }, {
+            onConflict: 'key'
+          });
+
+        if (error) throw error;
+      }
+
+      alert('Paramètres sauvegardés avec succès ! 🎉');
+    } catch (error) {
+      console.error('Error saving site settings:', error);
+      alert('Erreur lors de la sauvegarde des paramètres. Veuillez réessayer.');
     }
   };
 
@@ -945,10 +1045,7 @@ const AdminPanel = () => {
               {/* Save Button */}
               <div className="flex justify-end pt-6 border-t border-gray-200">
                 <button
-                  onClick={() => {
-                    // Here you would save the site settings
-                    alert('Paramètres sauvegardés ! 🎉');
-                  }}
+                  onClick={saveSiteSettings}
                   className="bg-sage-green text-white px-8 py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200 flex items-center"
                 >
                   <Save className="h-5 w-5 mr-2" />
