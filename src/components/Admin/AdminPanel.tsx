@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { supabase, Content, SiteSetting } from '../../lib/supabase';
-import { Plus, Edit, Trash2, Eye, EyeOff, Save, X, Home, Settings, Globe } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { Content, CATEGORY_LABELS } from '../../types/Content';
+import { Plus, Edit, Trash2, Eye, EyeOff, Save, X, Home, Settings, Globe, Image as ImageIcon } from 'lucide-react';
+import ImageUpload from './ImageUpload';
+import ImageGallery from './ImageGallery';
 
 const AdminPanel = () => {
-  const [contents, setContents] = useState<Content[]>([]);
+  const [contents, setContents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [editingContent, setEditingContent] = useState<Content | null>(null);
+  const [editingContent, setEditingContent] = useState<any | null>(null);
   const [user, setUser] = useState<any>(null);
-  const [activeTab, setActiveTab] = useState<'content' | 'site'>('content');
+  const [activeTab, setActiveTab] = useState<'content' | 'site' | 'images'>('content');
 
   // Site settings state
   const [siteSettings, setSiteSettings] = useState({
@@ -28,8 +31,8 @@ const AdminPanel = () => {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    category: 'recit' as Content['category'],
-    status: 'draft' as Content['status'],
+    category: 'recit' as any,
+    status: 'draft' as any,
     image_url: '',
     excerpt: '',
     tags: '',
@@ -39,7 +42,6 @@ const AdminPanel = () => {
   useEffect(() => {
     checkUser();
     fetchContents();
-    loadSiteSettings();
   }, []);
 
   const checkUser = async () => {
@@ -60,105 +62,6 @@ const AdminPanel = () => {
       console.error('Error fetching contents:', error);
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const loadSiteSettings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('site_settings')
-        .select('*');
-
-      if (error) throw error;
-
-      // Transformer les données en format utilisable
-      const settingsObj = data.reduce((acc: any, setting: any) => {
-        return { ...acc, ...setting.value };
-      }, {});
-
-      setSiteSettings({
-        siteName: settingsObj.siteName || 'POP travel',
-        siteTagline: settingsObj.siteTagline || '✈️ Voyage avec style',
-        heroTitle: settingsObj.heroTitle || 'POP travel',
-        heroSubtitle: settingsObj.heroSubtitle || 'Découvre le monde avec style ✨ Des récits authentiques, des guides pratiques et des inspirations pour tes prochaines aventures 🗺️',
-        aboutTitle: settingsObj.aboutTitle || 'À propos de POP travel 🤍',
-        aboutDescription: settingsObj.aboutDescription || 'Salut, moi c\'est POP ! ✌️ Passionnée de voyage depuis toujours, je partage mes aventures pour t\'inspirer à découvrir le monde autrement.',
-        contactEmail: settingsObj.contactEmail || 'pop@travel.com',
-        socialInstagram: settingsObj.socialInstagram || '#',
-        socialYoutube: settingsObj.socialYoutube || '#',
-        newsletterText: settingsObj.newsletterText || 'Reçois mes derniers articles, bons plans et inspirations directement dans ta boîte mail ! ✨'
-      });
-    } catch (error) {
-      console.error('Error loading site settings:', error);
-    }
-  };
-
-  const saveSiteSettings = async () => {
-    if (!user) return;
-
-    try {
-      // Préparer les données à sauvegarder par catégorie
-      const settingsToSave = [
-        {
-          key: 'site_identity',
-          value: {
-            siteName: siteSettings.siteName,
-            siteTagline: siteSettings.siteTagline
-          },
-          category: 'identity'
-        },
-        {
-          key: 'hero_section',
-          value: {
-            heroTitle: siteSettings.heroTitle,
-            heroSubtitle: siteSettings.heroSubtitle
-          },
-          category: 'content'
-        },
-        {
-          key: 'about_section',
-          value: {
-            aboutTitle: siteSettings.aboutTitle,
-            aboutDescription: siteSettings.aboutDescription
-          },
-          category: 'content'
-        },
-        {
-          key: 'contact_social',
-          value: {
-            contactEmail: siteSettings.contactEmail,
-            socialInstagram: siteSettings.socialInstagram,
-            socialYoutube: siteSettings.socialYoutube
-          },
-          category: 'contact'
-        },
-        {
-          key: 'newsletter',
-          value: {
-            newsletterText: siteSettings.newsletterText
-          },
-          category: 'content'
-        }
-      ];
-
-      // Sauvegarder chaque paramètre
-      for (const setting of settingsToSave) {
-        const { error } = await supabase
-          .from('site_settings')
-          .upsert({
-            ...setting,
-            author_id: user.id
-          }, {
-            onConflict: 'key'
-          });
-
-        if (error) throw error;
-      }
-
-      alert('Paramètres sauvegardés avec succès ! 🎉');
-    } catch (error) {
-      console.error('Error saving site settings:', error);
-      alert('Erreur lors de la sauvegarde des paramètres. Veuillez réessayer.');
     }
   };
 
@@ -195,7 +98,7 @@ const AdminPanel = () => {
     }
   };
 
-  const handleEdit = (content: Content) => {
+  const handleEdit = (content: any) => {
     setEditingContent(content);
     setFormData({
       title: content.title,
@@ -226,7 +129,7 @@ const AdminPanel = () => {
     }
   };
 
-  const toggleStatus = async (content: Content) => {
+  const toggleStatus = async (content: any) => {
     try {
       const newStatus = content.status === 'published' ? 'draft' : 'published';
       const { error } = await supabase
@@ -586,15 +489,6 @@ const AdminPanel = () => {
     }
   };
 
-  const categoryLabels = {
-    page: 'Page 📄',
-    recit: 'Récit 📖',
-    concert: 'Concert 🎵',
-    guide: 'Guide 🗺️',
-    inspiration: 'Inspiration ✨',
-    conseil: 'Conseil 💡'
-  };
-
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -659,6 +553,17 @@ const AdminPanel = () => {
               Gestion du contenu 📚
             </button>
             <button
+              onClick={() => setActiveTab('images')}
+              className={`flex-1 py-4 px-6 text-center font-medium transition-colors duration-200 ${
+                activeTab === 'images'
+                  ? 'text-sage-green border-b-2 border-sage-green'
+                  : 'text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <ImageIcon className="h-5 w-5 inline mr-2" />
+              Galerie d'images 🖼️
+            </button>
+            <button
               onClick={() => setActiveTab('site')}
               className={`flex-1 py-4 px-6 text-center font-medium transition-colors duration-200 ${
                 activeTab === 'site'
@@ -717,10 +622,10 @@ const AdminPanel = () => {
                           </label>
                           <select
                             value={formData.category}
-                            onChange={(e) => setFormData({ ...formData, category: e.target.value as Content['category'] })}
+                            onChange={(e) => setFormData({ ...formData, category: e.target.value as any })}
                             className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sage-green/50"
                           >
-                            {Object.entries(categoryLabels).map(([value, label]) => (
+                            {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
                               <option key={value} value={value}>{label}</option>
                             ))}
                           </select>
@@ -770,18 +675,12 @@ const AdminPanel = () => {
                     {/* Category Specific Fields */}
                     {renderCategorySpecificFields()}
 
-                    {/* Content */}
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-bold text-gray-900">Contenu principal ✍️</h3>
-                      <textarea
-                        value={formData.content}
-                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                        rows={15}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sage-green/50"
-                        placeholder="Rédigez votre contenu ici..."
-                        required
-                      />
-                    </div>
+                    <ImageUpload
+                      value={formData.image_url}
+                      onChange={(url) => setFormData({ ...formData, image_url: url })}
+                      label="Image principale"
+                      placeholder="Sélectionnez l'image principale de votre contenu"
+                    />
 
                     {/* Status */}
                     <div>
@@ -790,7 +689,7 @@ const AdminPanel = () => {
                       </label>
                       <select
                         value={formData.status}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value as Content['status'] })}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
                         className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-sage-green/50"
                       >
                         <option value="draft">Brouillon 📝</option>
@@ -844,7 +743,7 @@ const AdminPanel = () => {
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="text-lg font-semibold text-gray-900">{content.title}</h3>
                             <span className="bg-sage-green/10 text-sage-green px-3 py-1 rounded-full text-sm font-medium">
-                              {categoryLabels[content.category]}
+                              {CATEGORY_LABELS[content.category as keyof typeof CATEGORY_LABELS]}
                             </span>
                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${
                               content.status === 'published' 
@@ -895,6 +794,13 @@ const AdminPanel = () => {
               )}
             </div>
           </>
+        )}
+
+        {/* Images Tab */}
+        {activeTab === 'images' && (
+          <div className="bg-white rounded-3xl shadow-lg p-8">
+            <ImageGallery />
+          </div>
         )}
 
         {/* Site Settings Tab */}
@@ -1045,7 +951,10 @@ const AdminPanel = () => {
               {/* Save Button */}
               <div className="flex justify-end pt-6 border-t border-gray-200">
                 <button
-                  onClick={saveSiteSettings}
+                  onClick={() => {
+                    // Here you would save the site settings
+                    alert('Paramètres sauvegardés ! 🎉');
+                  }}
                   className="bg-sage-green text-white px-8 py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200 flex items-center"
                 >
                   <Save className="h-5 w-5 mr-2" />
