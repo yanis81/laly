@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { imageStorage, StoredImage } from '../../utils/ImageStorage';
-import { Trash2, Copy, Eye, Calendar, HardDrive } from 'lucide-react';
+import { Trash2, Copy, Eye, Calendar, HardDrive, X } from 'lucide-react';
 
 interface ImageGalleryProps {
   onSelectImage?: (url: string) => void;
