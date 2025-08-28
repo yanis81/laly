@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Content, CATEGORY_LABELS } from '../../types/Content';
+import { Content, CATEGORY_LABELS } from '../../types/content';
 import { Plus, Edit, Trash2, Eye, EyeOff, Save, X, Home, Settings, Globe, Image as ImageIcon } from 'lucide-react';
 import ImageUpload from './ImageUpload';
 import ImageGallery from './ImageGallery';
