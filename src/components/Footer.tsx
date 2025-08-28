@@ -47,12 +47,12 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Destinations 🗺️</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Thaïlande 🇹🇭</a></li>
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Japon 🇯🇵</a></li>
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Portugal 🇵🇹</a></li>
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Italie 🇮🇹</a></li>
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Maroc 🇲🇦</a></li>
-              <li><a href="#" className="hover:text-terracotta transition-colors duration-200">Nouvelle-Zélande 🇳🇿</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Thaïlande 🇹🇭</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Japon 🇯🇵</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Portugal 🇵🇹</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Italie 🇮🇹</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Maroc 🇲🇦</a></li>
+              <li><a href="#guides" className="hover:text-terracotta transition-colors duration-200">Nouvelle-Zélande 🇳🇿</a></li>
             </ul>
           </div>
         </div>
@@ -84,8 +84,8 @@ const Footer = () => {
               © 2024 POP travel. Tous voyages réservés avec ❤️
             </div>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-sage-green transition-colors duration-200">Mentions légales</a>
-              <a href="#" className="hover:text-sage-green transition-colors duration-200">Politique de confidentialité</a>
+              <a href="/mentions-legales" className="hover:text-sage-green transition-colors duration-200">Mentions légales</a>
+              <a href="/politique-confidentialite" className="hover:text-sage-green transition-colors duration-200">Politique de confidentialité</a>
               <a href="#contact" className="hover:text-sage-green transition-colors duration-200">Contact</a>
             </div>
           </div>

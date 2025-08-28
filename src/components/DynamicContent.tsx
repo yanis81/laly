@@ -152,9 +152,12 @@ const DynamicContent: React.FC<DynamicContentProps> = ({
                 )}
               </div>
               
-              <button className="w-full bg-sage-green text-white py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200">
+              <a 
+                href="#contact"
+                className="w-full bg-sage-green text-white py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200 block text-center"
+              >
                 Lire la suite ✨
-              </button>
+              </a>
             </div>
           </article>
         ))}

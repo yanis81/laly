@@ -188,9 +188,12 @@ const Concerts = () => {
                       {concert.story}
                     </p>
                     
-                    <button className="bg-sage-green text-white px-6 py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200">
+                    <a 
+                      href="#contact"
+                      className="bg-sage-green text-white px-6 py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200 inline-block"
+                    >
                       Lire mon récit complet 📖
-                    </button>
+                    </a>
                   </div>
                 </div>
               </article>

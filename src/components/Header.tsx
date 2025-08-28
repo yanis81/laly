@@ -20,7 +20,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <a href="#home" className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-200">
             <div className="bg-gradient-to-r from-sage-green to-terracotta p-2 rounded-full">
               <Plane className="h-6 w-6 text-white" />
             </div>
@@ -28,7 +28,7 @@ const Header = () => {
               <h1 className="text-2xl font-bold text-sage-green">POP travel</h1>
               <p className="text-xs text-terracotta">✈️ Voyage avec style</p>
             </div>
-          </div>
+          </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">

@@ -49,20 +49,27 @@ const Contact = () => {
               <h4 className="text-lg font-semibold text-gray-900">Retrouve-moi sur les réseaux 📱</h4>
               <div className="flex space-x-4">
                 <a 
-                  href="#" 
+                  href="https://www.instagram.com/poptravel" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center w-12 h-12 bg-sage-green text-white rounded-full hover:bg-sage-green/90 transition-colors duration-200"
+                  title="Suivez-nous sur Instagram"
                 >
                   <Instagram className="h-5 w-5" />
                 </a>
                 <a 
-                  href="#" 
+                  href="https://www.youtube.com/@poptravel" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center w-12 h-12 bg-terracotta text-white rounded-full hover:bg-terracotta/90 transition-colors duration-200"
+                  title="Abonnez-vous à notre chaîne YouTube"
                 >
                   <Youtube className="h-5 w-5" />
                 </a>
                 <a 
-                  href="#" 
+                  href="mailto:pop@travel.com" 
                   className="flex items-center justify-center w-12 h-12 bg-sage-green text-white rounded-full hover:bg-sage-green/90 transition-colors duration-200"
+                  title="Nous envoyer un email"
                 >
                   <Mail className="h-5 w-5" />
                 </a>

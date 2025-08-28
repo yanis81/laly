@@ -77,9 +77,12 @@ const Guides = () => {
                     {guide.budget}
                   </div>
                 </div>
-                <button className="w-full mt-4 bg-sage-green text-white py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200">
+                <a 
+                  href="#contact"
+                  className="w-full mt-4 bg-sage-green text-white py-3 rounded-full font-medium hover:bg-sage-green/90 transition-colors duration-200 block text-center"
+                >
                   Lire le guide ✨
-                </button>
+                </a>
               </div>
             </div>
           ))}

@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Smooth scrolling pour les ancres */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Style pour les liens d'ancrage actifs */
+:target {
+  scroll-margin-top: 80px; /* Compense la hauteur du header fixe */
+}
